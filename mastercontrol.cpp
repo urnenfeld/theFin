@@ -3,6 +3,9 @@
 #include "inputmaster.h"
 #include "player.h"
 #include "spawnmaster.h"
+#include "fishmaster.h"
+
+#include "localfisher.h"
 
 #include "mastercontrol.h"
 
@@ -36,6 +39,10 @@ void MasterControl::Start()
     RegisterSubsystem<EffectMaster>();
     RegisterSubsystem<InputMaster>();
     RegisterSubsystem<SpawnMaster>();
+    RegisterSubsystem<FishMaster>();
+
+    LocalFisher* lf = new LocalFisher(context_, "/tmp");
+    GetSubsystem<FishMaster>()->RegisterFisher(*lf);
 
     if (GRAPHICS)
         ENGINE->SetMaxFps(GRAPHICS->GetRefreshRate());

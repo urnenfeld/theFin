@@ -25,6 +25,8 @@ HEADERS += \
     player.h \
     controllable.h \
     effectmaster.h \
+    localfisher.h \
+    fishmaster.h
 
 SOURCES += \
     luckey.cpp \
@@ -35,6 +37,8 @@ SOURCES += \
     player.cpp \
     controllable.cpp \
     effectmaster.cpp \
+    localfisher.cpp \
+    fishmaster.cpp
 
 DISTFILES += \
     LICENSE_TEMPLATE
