@@ -20,7 +20,7 @@ public:
     MasterControl(Context* context);
     static MasterControl* GetInstance();
 
-    Scene* GetScene() const { return scene_; }
+    Scene* GetScene() const;
 
     void AddPlayer();
     Player* GetPlayer(int playerId) const;
@@ -42,7 +42,6 @@ private:
     void CreateScene();
 
     static MasterControl* instance_;
-    Scene* scene_;
     Vector< SharedPtr<Player> > players_;
 };
 

@@ -4,6 +4,7 @@
 #include "player.h"
 #include "spawnmaster.h"
 #include "fishmaster.h"
+#include "uimaster.h"
 
 #include "localfisher.h"
 
@@ -40,6 +41,7 @@ void MasterControl::Start()
     RegisterSubsystem<InputMaster>();
     RegisterSubsystem<SpawnMaster>();
     RegisterSubsystem<FishMaster>();
+    RegisterSubsystem<UIMaster>();
 
     LocalFisher* lf = new LocalFisher(context_, "/tmp");
     GetSubsystem<FishMaster>()->RegisterFisher(*lf);
@@ -47,44 +49,28 @@ void MasterControl::Start()
     if (GRAPHICS)
         ENGINE->SetMaxFps(GRAPHICS->GetRefreshRate());
 
-    CreateScene();
+    GetSubsystem<UIMaster>()->CreateScene();
 }
+
+
+Scene*
+MasterControl::GetScene() const
+{
+    return GetSubsystem<UIMaster>()->GetScene();
+}
+
+
 void MasterControl::Stop()
 {
     engine_->DumpResources(true);
 }
+
+
 void MasterControl::Exit()
 {
     engine_->Exit();
 }
 
-void MasterControl::CreateScene()
-{
-    scene_ = new Scene(context_);
-    scene_->CreateComponent<Octree>();
-    scene_->CreateComponent<PhysicsWorld>();
-    scene_->CreateComponent<DebugRenderer>();
-
-    // Load Scene
-    SharedPtr<File> file = CACHE->GetFile("Scenes/theFinScene.xml");
-    if (file) {
-        scene_->LoadXML(*file);
-    }
-
-    //Light
-    Node* lightNode{ scene_->CreateChild("Light") };
-    lightNode->SetPosition(Vector3(2.0f, 3.0f, 1.0f));
-    lightNode->CreateComponent<Light>();
-
-    //Camera
-    Node* cameraNode{ scene_->CreateChild("Camera") };
-    cameraNode->SetPosition(Vector3::UP * 3 + Vector3::BACK * 5.0f);
-    cameraNode->LookAt(Vector3::ZERO);
-    Camera* camera{ cameraNode->CreateComponent<Camera>() };
-    RENDERER->SetViewport(0, new Viewport(context_, scene_, camera));
-
-    // scene_->CreateChild()->CreateComponent<StaticModel>()->SetModel(CACHE->GetResource<Model>("Models/Box.mdl"));
-}
 
 Vector<SharedPtr<Player> > MasterControl::GetPlayers()
 {
