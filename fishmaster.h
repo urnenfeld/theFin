@@ -106,9 +106,13 @@ public:
     Vector<Fish> RetrieveFishes();
     void Rescan();
 
+    const Fish& Next();
+    const Fish& Previous();
 private:
     Vector<iFisher*> fisherTeam_;
     Vector<Fish> cachedFishes_;
+
+    unsigned index_;
 };
 
 #endif // FISHMASTER_H

@@ -1,6 +1,6 @@
 
 #include "uimaster.h"
-
+#include "fishmaster.h"
 
 
 UIMaster::UIMaster(Context* context) : Object(context)
@@ -36,4 +36,22 @@ UIMaster::CreateScene()
 
     // scene_->CreateChild()->CreateComponent<StaticModel>()->SetModel(CACHE->GetResource<Model>("Models/Box.mdl"));
 
+}
+
+
+void
+UIMaster::Next()
+{
+    Fish fish = GetSubsystem<FishMaster>()->Next();
+
+    printf("Selecting fish %s\n", fish.Name_.CString());
+}
+
+
+void
+UIMaster::Previous()
+{
+    Fish fish = GetSubsystem<FishMaster>()->Previous();
+
+    printf("Selecting fish %s\n",fish.Name_.CString());
 }

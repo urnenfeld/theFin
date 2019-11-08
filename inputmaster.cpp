@@ -2,6 +2,7 @@
 #include "player.h"
 
 #include "inputmaster.h"
+#include "uimaster.h"
 
 using namespace LucKey;
 
@@ -51,6 +52,8 @@ void InputMaster::HandleUpdate(StringHash eventType, VariantMap &eventData)
 { (void)eventType; (void)eventData;
 
     InputActions activeActions{};
+    InputActions keyupActions{};
+
     for (Player* p : MC->GetPlayers()){
 
         int pId{ p->GetPlayerId() };
@@ -77,6 +80,19 @@ void InputMaster::HandleUpdate(StringHash eventType, VariantMap &eventData)
             }
         }
     }
+
+
+    //Convert keyUp releases to actions
+    for (int key : keyUpKeys_){
+        //Check for master key presses
+        if (keyBindingsMaster_.Contains(key)){
+            keyUpKeys_.Remove(key); // TODO: removing inside loop!!
+            MasterInputAction action{keyBindingsMaster_[key]};
+            if (!keyupActions.master_.Contains(action))
+                keyupActions.master_.Push(action);
+        }
+    }
+
     //Check for joystick button presses
     for (Player* p : MC->GetPlayers()){
 
@@ -90,18 +106,38 @@ void InputMaster::HandleUpdate(StringHash eventType, VariantMap &eventData)
     }
 
     //Handle the registered actions
-    HandleActions(activeActions);
+    HandleActions(activeActions, keyupActions);
 }
 
-void InputMaster::HandleActions(const InputActions& actions)
+void InputMaster::HandleActions(const InputActions& actions, const InputActions& keyUpActions)
 {
     //Handle master actions
     for (MasterInputAction action : actions.master_){
         switch (action){
-        case MasterInputAction::UP:                 break;
-        case MasterInputAction::DOWN:               break;
+        case MasterInputAction::UP:
+            break;
+        case MasterInputAction::DOWN:
+            break;
         case MasterInputAction::LEFT:               break;
         case MasterInputAction::RIGHT:              break;
+        case MasterInputAction::CONFIRM:            break;
+        case MasterInputAction::CANCEL:             break;
+        case MasterInputAction::PAUSE:              break;
+        case MasterInputAction::MENU:               break;
+        default: break;
+        }
+    }
+
+    for (MasterInputAction action : keyUpActions.master_){
+        switch (action){
+        case MasterInputAction::UP:
+        case MasterInputAction::LEFT:
+            GetSubsystem<UIMaster>()->Next();
+            break;
+        case MasterInputAction::DOWN:
+        case MasterInputAction::RIGHT:
+            GetSubsystem<UIMaster>()->Previous();
+            break;
         case MasterInputAction::CONFIRM:            break;
         case MasterInputAction::CANCEL:             break;
         case MasterInputAction::PAUSE:              break;
@@ -166,7 +202,10 @@ void InputMaster::HandleKeyUp(StringHash eventType, VariantMap &eventData)
 { (void)eventType;
 
     int key{ eventData[KeyUp::P_KEY].GetInt() };
-    if (pressedKeys_.Contains(key)) pressedKeys_.Remove(key);
+    if (pressedKeys_.Contains(key))  {
+        pressedKeys_.Remove(key);
+        keyUpKeys_.Push(key);
+    }
 }
 
 void InputMaster::HandleJoystickButtonDown(StringHash eventType, VariantMap &eventData)

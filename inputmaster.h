@@ -59,6 +59,8 @@ private:
     HashMap<int, HashMap<int, PlayerInputAction> > buttonBindingsPlayer_;
 
     Vector<int> pressedKeys_;
+    Vector<int> keyUpKeys_;
+
     HashMap<int, Vector<LucKey::SixaxisButton> > pressedJoystickButtons_;
     HashMap<int, HashMap<int, float> > axesPosition_;
 
@@ -71,7 +73,7 @@ private:
     void HandleJoystickButtonUp(StringHash eventType, VariantMap &eventData);
     void HandleJoystickAxisMove(StringHash eventType, VariantMap& eventData);
 
-    void HandleActions(const InputActions &actions);
+    void HandleActions(const InputActions &actions, const InputActions& keyUpActions);
     void HandlePlayerAction(PlayerInputAction action, int playerId);
     Vector3 GetMoveFromActions(Vector<PlayerInputAction>* actions);
     Vector3 GetAimFromActions(Vector<PlayerInputAction>* actions);

@@ -45,6 +45,9 @@ void MasterControl::Start()
 
     LocalFisher* lf = new LocalFisher(context_, "/tmp");
     GetSubsystem<FishMaster>()->RegisterFisher(*lf);
+    Vector<Fish> fishes = GetSubsystem<FishMaster>()->RetrieveFishes();
+
+    printf("fishes size %d", fishes.Size());
 
     if (GRAPHICS)
         ENGINE->SetMaxFps(GRAPHICS->GetRefreshRate());

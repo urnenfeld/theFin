@@ -15,6 +15,14 @@ public:
     void CreateScene();
     Scene* GetScene() const { return scene_; }
 
+    void SwitchToFishes() {}
+    void Next();
+    void Previous();
+
+    void SwitchToBottomControls() {}
+
+    void Inkove() {}
+
 private:
     Scene* scene_;
 };
