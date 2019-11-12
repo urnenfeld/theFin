@@ -93,6 +93,7 @@ class iFisher
 public:
     virtual Vector<Fish> RetrieveFishes() = 0;
     virtual void Rescan() = 0;
+    virtual unsigned Size() = 0;
 };
 
 
@@ -106,8 +107,13 @@ public:
     Vector<Fish> RetrieveFishes();
     void Rescan();
 
-    const Fish& Next();
-    const Fish& Previous();
+    bool Valid() {
+        return cachedFishes_.Size() > 0;
+    }
+
+
+    const Fish* Next();
+    const Fish* Previous();
 private:
     Vector<iFisher*> fisherTeam_;
     Vector<Fish> cachedFishes_;

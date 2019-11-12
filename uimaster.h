@@ -6,6 +6,8 @@
 
 #include "luckey.h"
 
+class Fish;
+
 class UIMaster : public Object
 {
     URHO3D_OBJECT(UIMaster, Object);
@@ -18,6 +20,7 @@ public:
     void SwitchToFishes() {}
     void Next();
     void Previous();
+    void SelectFish(const Fish* fish);
 
     void SwitchToBottomControls() {}
 

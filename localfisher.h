@@ -13,6 +13,9 @@ public:
 
     virtual Vector<Fish> RetrieveFishes();
     virtual void Rescan();
+    virtual unsigned Size() {
+        return fishes_.Size();
+    }
 
 private:
     String path_;

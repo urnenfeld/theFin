@@ -43,27 +43,34 @@ FishMaster::Rescan()
 }
 
 
-const Fish&
+const Fish*
 FishMaster::Next()
 {
     unsigned previous = index_;
 
-    index_ = (index_ + 1) % cachedFishes_.Size();
+    if (Valid()) {
+        index_ = (index_ + 1) % cachedFishes_.Size();
+        return &cachedFishes_.At(previous);
+    }
 
-    return cachedFishes_.At(previous);
+    return nullptr;
 }
 
 
-const Fish&
+const Fish*
 FishMaster::Previous()
 {
     unsigned previous = index_;
 
-    if (index_ == 0) {
-        index_ = cachedFishes_.Size() - 1;
-    } else {
-        index_ = (index_ - 1) % cachedFishes_.Size();
+    if (Valid()) {
+        if (index_ == 0) {
+            index_ = cachedFishes_.Size() - 1;
+        } else {
+            index_ = (index_ - 1) % cachedFishes_.Size();
+        }
+
+        return &cachedFishes_.At(previous);
     }
 
-    return cachedFishes_.At(previous);
+    return nullptr;
 }

@@ -2,6 +2,7 @@
 #include "uimaster.h"
 #include "fishmaster.h"
 
+#include <Urho3D/UI/Text3D.h>
 
 UIMaster::UIMaster(Context* context) : Object(context)
 {
@@ -42,16 +43,36 @@ UIMaster::CreateScene()
 void
 UIMaster::Next()
 {
-    Fish fish = GetSubsystem<FishMaster>()->Next();
+    const Fish* fish = GetSubsystem<FishMaster>()->Next();
 
-    printf("Selecting fish %s\n", fish.Name_.CString());
+    if (fish) {
+        printf("Selecting fish %s\n", fish->Name_.CString());
+        SelectFish(fish);
+    } else {
+        printf("No Valid fish\n");
+    }
 }
 
 
 void
 UIMaster::Previous()
 {
-    Fish fish = GetSubsystem<FishMaster>()->Previous();
+    const Fish* fish = GetSubsystem<FishMaster>()->Previous();
 
-    printf("Selecting fish %s\n",fish.Name_.CString());
+    if (fish) {
+        printf("Selecting fish %s\n", fish->Name_.CString());
+        SelectFish(fish);
+    } else {
+        printf("No Valid fish\n");
+    }
+}
+
+
+void
+UIMaster::SelectFish(const Fish* fish) {
+
+    Node* nameNode = scene_->GetChild("FishName", true);
+    if (nameNode) {
+        nameNode->GetComponent<Text3D>()->SetText(fish->Name_);
+    }
 }
