@@ -46,10 +46,10 @@ UIMaster::Next()
     const Fish* fish = GetSubsystem<FishMaster>()->Next();
 
     if (fish) {
-        printf("Selecting fish %s\n", fish->Name_.CString());
+        Log::Write(LOG_INFO, "Selecting fish " + fish->Name_);
         SelectFish(fish);
     } else {
-        printf("No Valid fish\n");
+        Log::Write(LOG_ERROR, "No valid fish...");
     }
 }
 
@@ -60,10 +60,10 @@ UIMaster::Previous()
     const Fish* fish = GetSubsystem<FishMaster>()->Previous();
 
     if (fish) {
-        printf("Selecting fish %s\n", fish->Name_.CString());
+        Log::Write(LOG_INFO, "Selecting fish " + fish->Name_);
         SelectFish(fish);
     } else {
-        printf("No Valid fish\n");
+        Log::Write(LOG_ERROR, "No valid fish...");
     }
 }
 
@@ -71,8 +71,26 @@ UIMaster::Previous()
 void
 UIMaster::SelectFish(const Fish* fish) {
 
+    // TODO: Move node fetching to scene creation
     Node* nameNode = scene_->GetChild("FishName", true);
     if (nameNode) {
         nameNode->GetComponent<Text3D>()->SetText(fish->Name_);
     }
+
+    Node* descriptionNode = scene_->GetChild("FishDescription", true);
+    if (descriptionNode) {
+        descriptionNode->GetComponent<Text3D>()->SetText(fish->Description_);
+    }
+
+    Node* authorNode = scene_->GetChild("Author", true);
+    if (authorNode) {
+        authorNode->GetComponent<Text3D>()->SetText(fish->Author_);
+    }
+
+    if ((authorNode == nullptr) || (nameNode==nullptr) || (descriptionNode==nullptr)) {
+        Log::Write(LOG_ERROR, "Unable to find nodes in scene...");
+    }
+
+
+
 }
