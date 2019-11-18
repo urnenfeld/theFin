@@ -10,6 +10,11 @@ class Fish;
 
 class UIMaster : public Object
 {
+    enum {
+        FISHING,
+        OPTIONS
+    } mode_;
+
     URHO3D_OBJECT(UIMaster, Object);
 public:
     UIMaster(Context* context);
@@ -17,17 +22,25 @@ public:
     void CreateScene();
     Scene* GetScene() const { return scene_; }
 
-    void SwitchToFishes() {}
     void Next();
     void Previous();
-    void SelectFish(const Fish* fish);
 
-    void SwitchToBottomControls() {}
+    void SwitchToControls() { mode_ = OPTIONS; }
+    void SwitchToFishes() { mode_ = FISHING; }
 
     void Inkove() {}
 
 private:
+    void SelectFish(const Fish* fish);
+
     Scene* scene_;
+
+    Node* fishNameNode_;
+    Node* fishDescriptionNode_;
+    Node* fishAuthorNode_;
+
+
+    bool consistency_;
 };
 
 #endif // UIMASTER_H

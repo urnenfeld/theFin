@@ -21,6 +21,8 @@ UIMaster::CreateScene()
     SharedPtr<File> file = CACHE->GetFile("Scenes/theFinScene.xml");
     if (file) {
         scene_->LoadXML(*file);
+    } else {
+        Log::Write(LOG_ERROR, "Scene could not be loaded");
     }
 
     //Light
@@ -37,19 +39,31 @@ UIMaster::CreateScene()
 
     // scene_->CreateChild()->CreateComponent<StaticModel>()->SetModel(CACHE->GetResource<Model>("Models/Box.mdl"));
 
+    fishNameNode_ = scene_->GetChild("FishName", true);
+    fishDescriptionNode_ = scene_->GetChild("FishDescription", true);
+    fishAuthorNode_= scene_->GetChild("Author", true);
+
+    if (fishNameNode_ && fishDescriptionNode_ && fishAuthorNode_) {
+        consistency_ = true;
+    } else {
+        Log::Write(LOG_ERROR, "Some of the nodes were not found in scene...");
+        consistency_ = false;
+    }
 }
 
 
 void
 UIMaster::Next()
 {
-    const Fish* fish = GetSubsystem<FishMaster>()->Next();
+    if (mode_ == FISHING) {
+        const Fish* fish = GetSubsystem<FishMaster>()->Next();
 
-    if (fish) {
-        Log::Write(LOG_INFO, "Selecting fish " + fish->Name_);
-        SelectFish(fish);
-    } else {
-        Log::Write(LOG_ERROR, "No valid fish...");
+        if (fish) {
+            Log::Write(LOG_INFO, "Selecting fish " + fish->Name_);
+            SelectFish(fish);
+        } else {
+            Log::Write(LOG_ERROR, "No valid fish...");
+        }
     }
 }
 
@@ -57,13 +71,15 @@ UIMaster::Next()
 void
 UIMaster::Previous()
 {
-    const Fish* fish = GetSubsystem<FishMaster>()->Previous();
+    if (mode_ == FISHING) {
+        const Fish* fish = GetSubsystem<FishMaster>()->Previous();
 
-    if (fish) {
-        Log::Write(LOG_INFO, "Selecting fish " + fish->Name_);
-        SelectFish(fish);
-    } else {
-        Log::Write(LOG_ERROR, "No valid fish...");
+        if (fish) {
+            Log::Write(LOG_INFO, "Selecting fish " + fish->Name_);
+            SelectFish(fish);
+        } else {
+            Log::Write(LOG_ERROR, "No valid fish...");
+        }
     }
 }
 
@@ -71,26 +87,9 @@ UIMaster::Previous()
 void
 UIMaster::SelectFish(const Fish* fish) {
 
-    // TODO: Move node fetching to scene creation
-    Node* nameNode = scene_->GetChild("FishName", true);
-    if (nameNode) {
-        nameNode->GetComponent<Text3D>()->SetText(fish->Name_);
+    if (consistency_) {
+        fishNameNode_->GetComponent<Text3D>()->SetText(fish->Name_);
+        fishDescriptionNode_->GetComponent<Text3D>()->SetText(fish->Description_);
+        fishAuthorNode_->GetComponent<Text3D>()->SetText(fish->Author_);
     }
-
-    Node* descriptionNode = scene_->GetChild("FishDescription", true);
-    if (descriptionNode) {
-        descriptionNode->GetComponent<Text3D>()->SetText(fish->Description_);
-    }
-
-    Node* authorNode = scene_->GetChild("Author", true);
-    if (authorNode) {
-        authorNode->GetComponent<Text3D>()->SetText(fish->Author_);
-    }
-
-    if ((authorNode == nullptr) || (nameNode==nullptr) || (descriptionNode==nullptr)) {
-        Log::Write(LOG_ERROR, "Unable to find nodes in scene...");
-    }
-
-
-
 }
