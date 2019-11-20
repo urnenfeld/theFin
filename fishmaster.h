@@ -114,6 +114,7 @@ public:
 
     const Fish* Next();
     const Fish* Previous();
+    const Fish* Current();
 private:
     Vector<iFisher*> fisherTeam_;
     Vector<Fish> cachedFishes_;

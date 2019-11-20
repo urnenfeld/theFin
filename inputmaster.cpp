@@ -138,7 +138,9 @@ void InputMaster::HandleActions(const InputActions& actions, const InputActions&
         case MasterInputAction::RIGHT:
             GetSubsystem<UIMaster>()->Previous();
             break;
-        case MasterInputAction::CONFIRM:            break;
+        case MasterInputAction::CONFIRM:
+            GetSubsystem<UIMaster>()->Invoke();
+            break;
         case MasterInputAction::CANCEL:             break;
         case MasterInputAction::PAUSE:              break;
         case MasterInputAction::MENU:               break;

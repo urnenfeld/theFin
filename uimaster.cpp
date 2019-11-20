@@ -1,10 +1,18 @@
 
 #include "uimaster.h"
 #include "fishmaster.h"
+#include "mastercontrol.h"
+
 
 #include <Urho3D/UI/Text3D.h>
 
-UIMaster::UIMaster(Context* context) : Object(context)
+UIMaster::UIMaster(Context* context)
+    : Object(context)
+    , mode_(FISHING)
+    , fishNameNode_(nullptr)
+    , fishDescriptionNode_(nullptr)
+    , fishAuthorNode_(nullptr)
+    , consistency_(false)
 {
 }
 
@@ -37,8 +45,7 @@ UIMaster::CreateScene()
     Camera* camera{ cameraNode->CreateComponent<Camera>() };
     RENDERER->SetViewport(0, new Viewport(context_, scene_, camera));
 
-    // scene_->CreateChild()->CreateComponent<StaticModel>()->SetModel(CACHE->GetResource<Model>("Models/Box.mdl"));
-
+    // Scening
     fishNameNode_ = scene_->GetChild("FishName", true);
     fishDescriptionNode_ = scene_->GetChild("FishDescription", true);
     fishAuthorNode_= scene_->GetChild("Author", true);
@@ -48,6 +55,16 @@ UIMaster::CreateScene()
     } else {
         Log::Write(LOG_ERROR, "Some of the nodes were not found in scene...");
         consistency_ = false;
+    }
+
+    // Set intial status
+    const Fish* fish = GetSubsystem<FishMaster>()->Current();
+
+    if (fish) {
+        Log::Write(LOG_INFO, "Initial selection ok " + fish->Name_);
+        SelectFish(fish);
+    } else {
+        Log::Write(LOG_ERROR, "No valid fish for initial selection ...");
     }
 }
 
@@ -62,7 +79,7 @@ UIMaster::Next()
             Log::Write(LOG_INFO, "Selecting fish " + fish->Name_);
             SelectFish(fish);
         } else {
-            Log::Write(LOG_ERROR, "No valid fish...");
+            Log::Write(LOG_ERROR, "No valid fish for selecting...");
         }
     }
 }
@@ -78,7 +95,7 @@ UIMaster::Previous()
             Log::Write(LOG_INFO, "Selecting fish " + fish->Name_);
             SelectFish(fish);
         } else {
-            Log::Write(LOG_ERROR, "No valid fish...");
+            Log::Write(LOG_ERROR, "No valid fish for selecting...");
         }
     }
 }
@@ -91,5 +108,19 @@ UIMaster::SelectFish(const Fish* fish) {
         fishNameNode_->GetComponent<Text3D>()->SetText(fish->Name_);
         fishDescriptionNode_->GetComponent<Text3D>()->SetText(fish->Description_);
         fishAuthorNode_->GetComponent<Text3D>()->SetText(fish->Author_);
+    }
+}
+
+
+void
+UIMaster::Invoke() {
+    if (mode_ == FISHING) {
+        const Fish* fish = GetSubsystem<FishMaster>()->Current();
+        if (fish != nullptr) {
+            GetSubsystem<FileSystem>()->SystemCommandAsync(fish->Id_);
+        } else {
+            Log::Write(LOG_ERROR, "No valid fish for invoking...");
+        }
+        MC->Exit();
     }
 }

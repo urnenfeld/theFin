@@ -74,3 +74,14 @@ FishMaster::Previous()
 
     return nullptr;
 }
+
+
+const Fish*
+FishMaster::Current()
+{
+    if (Valid()) {
+        return &cachedFishes_.At(index_);
+    }
+
+    return nullptr;
+}

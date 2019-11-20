@@ -28,7 +28,7 @@ public:
     void SwitchToControls() { mode_ = OPTIONS; }
     void SwitchToFishes() { mode_ = FISHING; }
 
-    void Inkove() {}
+    void Invoke();
 
 private:
     void SelectFish(const Fish* fish);
