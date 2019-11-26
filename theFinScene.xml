@@ -124,7 +124,8 @@
 			<component type="Text3D" id="12">
 				<attribute name="Font" value="Font;Fonts/BlueHighway.ttf" />
 				<attribute name="Text" value="SuperLongDescription" />
-				<attribute name="Width" value="154" />
+				<attribute name="Width" value="354" />
+				<attribute name="Word Wrap" value="true" />
 			</component>
 		</node>
 		<node id="12">

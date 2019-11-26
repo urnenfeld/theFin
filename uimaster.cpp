@@ -118,9 +118,9 @@ UIMaster::Invoke() {
         const Fish* fish = GetSubsystem<FishMaster>()->Current();
         if (fish != nullptr) {
             GetSubsystem<FileSystem>()->SystemCommandAsync(fish->Id_);
+            MC->Exit();
         } else {
             Log::Write(LOG_ERROR, "No valid fish for invoking...");
         }
-        MC->Exit();
     }
 }
