@@ -67,6 +67,8 @@ public:
                     }
                 }
 
+                file.Close();
+
                 if (fish->CheckIntegrity())
                     return fish;
                 else {
@@ -80,6 +82,7 @@ public:
         } else {
             Log::Write(LOG_ERROR, "Not able to open file.");
         }
+        file.Close();
 
         return nullptr;
     }
