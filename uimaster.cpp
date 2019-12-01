@@ -1,3 +1,5 @@
+#include <unistd.h>
+
 
 #include "uimaster.h"
 #include "fishmaster.h"
@@ -117,8 +119,27 @@ UIMaster::Invoke() {
     if (mode_ == FISHING) {
         const Fish* fish = GetSubsystem<FishMaster>()->Current();
         if (fish != nullptr) {
-            GetSubsystem<FileSystem>()->SystemCommandAsync(fish->Id_);
-            MC->Exit();
+            int unistd_error;
+            const String delegationSelector = "/tmp/finNextLaunch";
+            // Inform the other world what do we want to launch by:
+            // A symlink and a success exit code.
+            // As theFin must die and free ALL resources to the fish...
+
+            if (GetSubsystem<FileSystem>()->Delete(delegationSelector)) {
+#ifdef EXECUTING_ON_TARGET
+                unistd_error= symlink("/usr/bin/"+fish->Id_+"-launcher", delegationSelector);
+#else
+                unistd_error = symlink("/bin/ls", delegationSelector.CString());
+#endif
+                if (unistd_error == 0) {
+                    ErrorExit("Launching Fish ... "+fish->Id_+"-launcher", EXIT_SUCCESS);
+                } else {
+                    Log::Write(LOG_ERROR, "Launch delegation did not work!(Symlink)");
+                }
+            } else {
+                Log::Write(LOG_ERROR, "Launch delegation did not work!(Deletion)");
+            }
+
         } else {
             Log::Write(LOG_ERROR, "No valid fish for invoking...");
         }
