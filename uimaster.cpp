@@ -124,8 +124,10 @@ UIMaster::Invoke() {
             // Inform the other world what do we want to launch by:
             // A symlink and a success exit code.
             // As theFin must die and free ALL resources to the fish...
-
-            if (GetSubsystem<FileSystem>()->Delete(delegationSelector)) {
+            
+            
+            
+            if (!(GetSubsystem<FileSystem>()->FileExists(delegationSelector) || GetSubsystem<FileSystem>()->Delete(delegationSelector)) {
 #ifdef EXECUTING_ON_TARGET
                 unistd_error= symlink("/usr/bin/"+fish->Id_+"-launcher", delegationSelector);
 #else
