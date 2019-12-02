@@ -121,13 +121,13 @@ UIMaster::Invoke() {
         if (fish != nullptr) {
             int unistd_error;
             const String delegationSelector = "/tmp/finNextLaunch";
+
             // Inform the other world what do we want to launch by:
             // A symlink and a success exit code.
             // As theFin must die and free ALL resources to the fish...
-            
-            
-            
-            if (!(GetSubsystem<FileSystem>()->FileExists(delegationSelector) || GetSubsystem<FileSystem>()->Delete(delegationSelector)) {
+            // The script called from the init process should check for the
+            // EXIS_SUCCESS and launch the fish or shutdown in case of EXIT_FAILURE
+            if (!(GetSubsystem<FileSystem>()->FileExists(delegationSelector)) || GetSubsystem<FileSystem>()->Delete(delegationSelector)) {
 #ifdef EXECUTING_ON_TARGET
                 unistd_error= symlink("/usr/bin/"+fish->Id_+"-launcher", delegationSelector);
 #else
