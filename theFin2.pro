@@ -27,7 +27,8 @@ HEADERS += \
     effectmaster.h \
     localfisher.h \
     fishmaster.h \
-    uimaster.h
+    uimaster.h \
+    fish.h
 
 SOURCES += \
     luckey.cpp \
