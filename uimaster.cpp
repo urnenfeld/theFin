@@ -14,6 +14,7 @@ UIMaster::UIMaster(Context* context)
     , fishNameNode_(nullptr)
     , fishDescriptionNode_(nullptr)
     , fishAuthorNode_(nullptr)
+    , fishNumber_(nullptr)
     , consistency_(false)
 {
 }
@@ -51,8 +52,9 @@ UIMaster::CreateScene()
     fishNameNode_ = scene_->GetChild("FishName", true);
     fishDescriptionNode_ = scene_->GetChild("FishDescription", true);
     fishAuthorNode_= scene_->GetChild("Author", true);
+    fishNumber_ = scene_->GetChild("FishNumber", true);
 
-    if (fishNameNode_ && fishDescriptionNode_ && fishAuthorNode_) {
+    if (fishNameNode_ && fishDescriptionNode_ && fishAuthorNode_ && fishNumber_) {
         consistency_ = true;
     } else {
         Log::Write(LOG_ERROR, "Some of the nodes were not found in scene...");
@@ -110,6 +112,9 @@ UIMaster::SelectFish(const Fish* fish) {
         fishNameNode_->GetComponent<Text3D>()->SetText(fish->Name_);
         fishDescriptionNode_->GetComponent<Text3D>()->SetText(fish->Description_);
         fishAuthorNode_->GetComponent<Text3D>()->SetText(fish->Author_);
+
+        String count = "[" + String(GetSubsystem<FishMaster>()->CurrentFishIndex()+1) + "/" + String(GetSubsystem<FishMaster>()->TotalFishes()) + "]";
+        fishNumber_->GetComponent<Text3D>()->SetText(count);
     }
 }
 

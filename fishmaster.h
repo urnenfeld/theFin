@@ -31,6 +31,13 @@ public:
         return cachedFishes_.Size() > 0;
     }
 
+    unsigned CurrentFishIndex() {
+        return index_;
+    }
+
+    unsigned TotalFishes() {
+        return cachedFishes_.Size();
+    }
 
     const Fish* Next();
     const Fish* Previous();

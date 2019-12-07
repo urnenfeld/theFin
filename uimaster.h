@@ -38,7 +38,7 @@ private:
     Node* fishNameNode_;
     Node* fishDescriptionNode_;
     Node* fishAuthorNode_;
-
+    Node* fishNumber_;
 
     bool consistency_;
 };
