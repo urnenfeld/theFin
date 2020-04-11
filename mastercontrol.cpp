@@ -43,11 +43,17 @@ void MasterControl::Start()
     RegisterSubsystem<FishMaster>();
     RegisterSubsystem<UIMaster>();
 
-    LocalFisher* lf = new LocalFisher(context_, "/tmp");
+    // Get actual environment from IDE...
+    char* local_fisher_path = getenv("LOCAL_FISH_PATH");
+    if (!local_fisher_path) {
+        // Otherwise assuming cross-compiling & running in target
+        local_fisher_path = strdup("/");
+    }
+
+    LocalFisher* lf = new LocalFisher(context_, local_fisher_path);
+
     GetSubsystem<FishMaster>()->RegisterFisher(*lf);
     Vector<Fish> fishes = GetSubsystem<FishMaster>()->RetrieveFishes();
-
-    printf("fishes size %d", fishes.Size());
 
     if (GRAPHICS)
         ENGINE->SetMaxFps(GRAPHICS->GetRefreshRate());
