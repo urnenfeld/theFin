@@ -48,6 +48,9 @@ void MasterControl::Start()
     if (!local_fisher_path) {
         // Otherwise assuming cross-compiling & running in target
         local_fisher_path = strdup("/");
+        Log::Write(LOG_INFO, "Assuming target execution");
+    } else {
+        Log::Write(LOG_WARNING, "Assuming host execution");
     }
 
     LocalFisher* lf = new LocalFisher(context_, local_fisher_path);

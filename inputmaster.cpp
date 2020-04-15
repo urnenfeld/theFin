@@ -191,6 +191,7 @@ void InputMaster::HandleKeyDown(StringHash eventType, VariantMap &eventData)
 
     switch (key){
     case KEY_ESCAPE:{
+        ErrorExit("Exitting ... ", EXIT_SUCCESS);
         MC->Exit();
     } break;
     case KEY_9:{

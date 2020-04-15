@@ -133,13 +133,19 @@ UIMaster::Invoke() {
             // The script called from the init process should check for the
             // EXIS_SUCCESS and launch the fish or shutdown in case of EXIT_FAILURE
             if (!(GetSubsystem<FileSystem>()->FileExists(delegationSelector)) || GetSubsystem<FileSystem>()->Delete(delegationSelector)) {
-#ifdef EXECUTING_ON_TARGET
-                unistd_error= symlink("/usr/bin/"+fish->Id_+"-launcher", delegationSelector);
-#else
-                unistd_error = symlink("/bin/ls", delegationSelector.CString());
-#endif
+
+                // Get actual environment from IDE...
+                char* local_fisher_path = getenv("LOCAL_FISH_PATH");
+                if (local_fisher_path) {
+                    unistd_error = symlink("/bin/ls", delegationSelector.CString());
+                } else {
+                    const String link = "/usr/bin/"+fish->Id_+"-launcher";
+                    unistd_error= symlink(link.CString(), delegationSelector.CString());
+                }
+
                 if (unistd_error == 0) {
                     ErrorExit("Launching Fish ... "+fish->Id_+"-launcher", EXIT_SUCCESS);
+                    MC->Exit();
                 } else {
                     Log::Write(LOG_ERROR, "Launch delegation did not work!(Symlink)");
                 }
