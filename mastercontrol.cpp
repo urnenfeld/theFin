@@ -33,7 +33,7 @@ void MasterControl::Setup()
     engineParameters_[EP_WINDOW_TITLE] = "theFin2";
     engineParameters_[EP_WINDOW_ICON] = "Textures/UrhoIcon.png";
     engineParameters_[EP_WORKER_THREADS] = false;
-    engineParameters_[EP_RESOURCE_PATHS] = "Data;CoreData;Resources;";
+    engineParameters_[EP_RESOURCE_PATHS] = "Data;CoreData;Add1";
 }
 void MasterControl::Start()
 {

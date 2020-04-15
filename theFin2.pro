@@ -1,7 +1,7 @@
-TARGET = thefin2
+TARGET = thefin
 
 LIBS += \
-    ../theFin2/Urho3D/lib/libUrho3D.a \
+    Urho3D/lib/libUrho3D.so \
     -lpthread \
     -ldl \
     -lGL
@@ -9,8 +9,8 @@ LIBS += \
 QMAKE_CXXFLAGS += -std=c++11 -O2
 
 INCLUDEPATH += \
-    ../theFin2/Urho3D/include \
-    ../theFin2/Urho3D/include/Urho3D/ThirdParty \
+    Urho3D/include \
+    Urho3D/include/Urho3D/ThirdParty \
 
 TEMPLATE = app
 CONFIG -= app_bundle
