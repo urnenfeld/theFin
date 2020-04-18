@@ -132,11 +132,11 @@ void InputMaster::HandleActions(const InputActions& actions, const InputActions&
         switch (action){
         case MasterInputAction::UP:
         case MasterInputAction::LEFT:
-            GetSubsystem<UIMaster>()->Next();
+            GetSubsystem<UIMaster>()->Previous();
             break;
         case MasterInputAction::DOWN:
         case MasterInputAction::RIGHT:
-            GetSubsystem<UIMaster>()->Previous();
+            GetSubsystem<UIMaster>()->Next();
             break;
         case MasterInputAction::CONFIRM:
             GetSubsystem<UIMaster>()->Invoke();

@@ -46,11 +46,9 @@ FishMaster::Rescan()
 const Fish*
 FishMaster::Next()
 {
-    unsigned previous = index_;
-
     if (Valid()) {
         index_ = (index_ + 1) % cachedFishes_.Size();
-        return &cachedFishes_.At(previous);
+        return &cachedFishes_.At(index_);
     }
 
     return nullptr;
@@ -60,8 +58,6 @@ FishMaster::Next()
 const Fish*
 FishMaster::Previous()
 {
-    unsigned previous = index_;
-
     if (Valid()) {
         if (index_ == 0) {
             index_ = cachedFishes_.Size() - 1;
@@ -69,7 +65,7 @@ FishMaster::Previous()
             index_ = (index_ - 1) % cachedFishes_.Size();
         }
 
-        return &cachedFishes_.At(previous);
+        return &cachedFishes_.At(index_);
     }
 
     return nullptr;
