@@ -40,6 +40,7 @@ private:
     Node* fishAuthorNode_;
     Node* fishNumber_;
 
+    float rotation_ = 90.0f;
     bool consistency_;
 };
 

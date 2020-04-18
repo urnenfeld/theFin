@@ -3,6 +3,7 @@
 
 #include "uimaster.h"
 #include "fishmaster.h"
+#include "effectmaster.h"
 #include "mastercontrol.h"
 
 
@@ -81,6 +82,7 @@ UIMaster::Next()
 
         if (fish) {
             Log::Write(LOG_INFO, "Selecting fish " + fish->Name_);
+            rotation_ += 90.0f;
             SelectFish(fish);
         } else {
             Log::Write(LOG_ERROR, "No valid fish for selecting...");
@@ -97,6 +99,7 @@ UIMaster::Previous()
 
         if (fish) {
             Log::Write(LOG_INFO, "Selecting fish " + fish->Name_);
+            rotation_ -= 90.0f;
             SelectFish(fish);
         } else {
             Log::Write(LOG_ERROR, "No valid fish for selecting...");
@@ -115,6 +118,11 @@ UIMaster::SelectFish(const Fish* fish) {
 
         String count = "[" + String(GetSubsystem<FishMaster>()->CurrentFishIndex()+1) + "/" + String(GetSubsystem<FishMaster>()->TotalFishes()) + "]";
         fishNumber_->GetComponent<Text3D>()->SetText(count);
+
+        Node* boxEffect = scene_->GetChild("UrhoBox", true);
+        if (boxEffect) {
+            GetSubsystem<EffectMaster>()->RotateTo(boxEffect, Quaternion(0, rotation_, 0), 1.0f);
+        }
     }
 }
 

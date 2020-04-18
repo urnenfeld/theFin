@@ -41,7 +41,7 @@
 		</component>
 		<node id="8">
 			<attribute name="Is Enabled" value="true" />
-			<attribute name="Name" value="" />
+			<attribute name="Name" value="urhofish" />
 			<attribute name="Tags" />
 			<attribute name="Position" value="0 0 0" />
 			<attribute name="Rotation" value="0.683668 -0.683669 0.180548 0.180548" />
