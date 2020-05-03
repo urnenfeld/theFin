@@ -30,21 +30,22 @@ void LocalFisher::Rescan()
     }
 */
     if (GetSubsystem<FileSystem>()->DirExists(path_)) {
-        GetSubsystem<FileSystem>()->ScanDir(manifests_, path_, "urhofest.json", SCAN_FILES, true);
+        GetSubsystem<FileSystem>()->ScanDir(manifests_, path_, ".json", SCAN_FILES, true);
         if (manifests_.Empty()) {
             Log::Write(LOG_WARNING, "No Manifests found");
         } else {
             for (String manifest : manifests_) {
+                if (manifest.Contains("urhofest.json")) {
+                    manifest = path_ + "/" + manifest;
+                    Log::Write(LOG_INFO, "Inspecting fish... " + manifest);
 
-                manifest = path_ + "/" + manifest;
-                Log::Write(LOG_INFO, "Inspecting fish... " + manifest);
-
-                Fish* fish = Fish::FromJsonFile(context_, manifest);
-                if (fish != nullptr) {
-                    Log::Write(LOG_INFO, "Registering Fish : " + fish->Name_);
-                    fishes_.Push(*fish);
-                } else {
-                    Log::Write(LOG_ERROR, "Malformed manifest for : " + manifest);
+                    Fish* fish = Fish::FromJsonFile(context_, manifest);
+                    if (fish != nullptr) {
+                        Log::Write(LOG_INFO, "Registering Fish : " + fish->Name_);
+                        fishes_.Push(*fish);
+                    } else {
+                        Log::Write(LOG_ERROR, "Malformed manifest for : " + manifest);
+                    }
                 }
             }
         }
