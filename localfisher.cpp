@@ -35,6 +35,7 @@ void LocalFisher::Rescan()
             Log::Write(LOG_WARNING, "No Manifests found");
         } else {
             for (String manifest : manifests_) {
+                // NOTE: ScanDir will only filter extensions
                 if (manifest.Contains("urhofest.json")) {
                     manifest = path_ + "/" + manifest;
                     Log::Write(LOG_INFO, "Inspecting fish... " + manifest);
